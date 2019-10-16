@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Article::Create{% endblock title %}
+
+{% block container %}
+{% comment %} <form method="POST" action="{% url 'articles:create' %}"> {% endcomment %}
+{% comment %} 같은 url 로 간다면 action 이 없어도된다. {% endcomment %}
+<form method="POST">
+  {% comment %} Cross-site request forgery {% endcomment %}
+  {% csrf_token %}
+  {{form.as_p}}
+  <button type="submit">Create</button>
+</form>
+{% endblock container %}
