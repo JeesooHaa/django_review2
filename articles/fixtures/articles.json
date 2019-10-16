@@ -1,0 +1,42 @@
+[
+    {
+        "model": "articles.article",
+        "pk": 1,
+        "fields": {
+            "title": "\uccab\ubc88\uc9f8 \ud0c0\uc774\ud2c0",
+            "content": "",
+            "created_at": "2019-10-16T01:23:05.958Z",
+            "updated_at": "2019-10-16T01:23:05.958Z"
+        }
+    },
+    {
+        "model": "articles.article",
+        "pk": 2,
+        "fields": {
+            "title": "\ub450\ubc88\uc9f8 \ud0c0\uc774\ud2c0",
+            "content": "\uc798 \uc791\uc131\uc774 \ub418\ub294\uc9c0...",
+            "created_at": "2019-10-16T01:23:58.096Z",
+            "updated_at": "2019-10-16T07:21:24.898Z"
+        }
+    },
+    {
+        "model": "articles.article",
+        "pk": 3,
+        "fields": {
+            "title": "\uc138\ubc88\uc9f8 \ud0c0\uc774\ud2c0",
+            "content": "\uc131\uacf5?",
+            "created_at": "2019-10-16T04:47:54.868Z",
+            "updated_at": "2019-10-16T04:47:54.868Z"
+        }
+    },
+    {
+        "model": "articles.article",
+        "pk": 4,
+        "fields": {
+            "title": "4",
+            "content": "embed \ud655\uc778\uc6a9",
+            "created_at": "2019-10-16T05:23:18.057Z",
+            "updated_at": "2019-10-16T05:23:18.057Z"
+        }
+    }
+]

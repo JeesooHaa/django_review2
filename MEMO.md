@@ -30,3 +30,20 @@ embed()
 POST ; 우리가 제공하는 인터페이스에서만 특정 기능을 수행할수 있도록 
 
 from django.views.decorators.http import require_POST, require_GET
+
+
+admin.site.register(Person)
+
+
+python manage.py dumpdata
+
+python manage.py dumpdata --format=json articles.article > articles.json
+
+format document
+
+pip install pyyaml
+python manage.py dumpdata --format=yaml articles.article > articles.yaml
+
+fixtures 안에 있어야만 data seeding 이 됩니다.
+
+python manage.py loaddata articles.json
