@@ -13,4 +13,17 @@
   {% csrf_token %}
   <button type="submit">Delete</button>
 </form>
+<hr>
+{% for comment in comments %}
+<p>{{ comment.pk }}. {{ comment.content }}</p>
+<form action="{% url 'articles:comment_delete' comment.pk %}", method="POST">
+  {% csrf_token %}
+  <button type="submit">Comment Delete</button>
+</form>
+{% endfor %}
+<form action="{% url 'articles:comment_create' article.pk %}", method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Comment Create</button>
+</form>
 {% endblock container %}
