@@ -59,3 +59,5 @@ cookies, session, cache
 쿠키에 로그인 세션 저장 : 로그인 상태 
 
 로그아웃 : 세션에 대한 정보 삭제 
+
+dir()

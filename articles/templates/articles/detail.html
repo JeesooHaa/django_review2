@@ -3,27 +3,38 @@
 {% block title %}Article::Detail{% endblock title %}
 
 {% block container %}
+
 <h2>{{ article.title }}</h2>
 <p>{{ article.created_at }}</p>
 <hr>
 <p>{{ article.content }}</p>
 <hr>
+
+{% if user.is_authenticated %}
 <a href="{% url 'articles:update' article.pk %}">[Update]</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
   {% csrf_token %}
   <button type="submit">Delete</button>
 </form>
 <hr>
+{% endif %}
+
 {% for comment in comments %}
 <p>{{ comment.pk }}. {{ comment.content }}</p>
+{% if user.is_authenticated %}
 <form action="{% url 'articles:comment_delete' comment.pk %}", method="POST">
   {% csrf_token %}
   <button type="submit">Comment Delete</button>
 </form>
+{% endif %}
 {% endfor %}
+
+{% if user.is_authenticated %}
 <form action="{% url 'articles:comment_create' article.pk %}", method="POST">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Comment Create</button>
 </form>
+{% endif %}
+
 {% endblock container %}

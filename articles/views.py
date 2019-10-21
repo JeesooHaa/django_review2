@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from IPython import embed
@@ -12,6 +14,9 @@ def index(request):
     return render(request, 'articles/index.html', context)
 
 
+# accounts login 이라 login page 로 감 
+# @login_required(login_url='/users/login/')
+@login_required
 def create(request):
     if request.method == 'POST':
         # Article 을 생성해달라고 하는 요청
@@ -47,6 +52,7 @@ def detail(request, article_pk):
     # return render(request, 'articles/detail.html', {'article': article})
 
 
+@login_required
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'POST':
@@ -63,26 +69,31 @@ def update(request, article_pk):
 
 # 받는 method 를 POST 로 제한 
 @require_POST
+# POST 로만 오는데 필요한가...
+# GET 요청에서만 사용하면됨 
+# @login_required
+# GET 요청으로 처리하지 말아야 하는 경우에는 사용하면 안됨 login_required
 def delete(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    # if request.method == 'POST':
-    article.delete()
-    # 보여줄만한 페이지가 따로 없다...
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, pk=article_pk)
+        # if request.method == 'POST':
+        article.delete()
+        # 보여줄만한 페이지가 따로 없다...
     return redirect('articles:index')
-    # else:
-    #     pass
 
 
 @require_POST
+# @login_required
 def comment_create(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        # 임시저장 
-        comment = form.save(commit=False)
-        comment.article_id = article_pk
-        comment.save()
-        return redirect('articles:detail', article_pk)
+    if request.user.is_authenticated:
+        # article = get_object_or_404(Article, pk=article_pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # 임시저장 
+            comment = form.save(commit=False)
+            comment.article_id = article_pk
+            comment.save()
+            return redirect('articles:detail', article_pk)
 
     # comment = Comment(article_id = article_pk)
     # form = CommentForm(request.POST, instance=comment)
@@ -90,8 +101,11 @@ def comment_create(request, article_pk):
 
 
 @require_POST
+# @login_required
 def comment_delete(request, comment_pk):
-    comment = get_object_or_404(Comment, pk=comment_pk)
-    article_pk = comment.article_id
-    comment.delete()
-    return redirect('articles:detail', article_pk)
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        article_pk = comment.article_id
+        comment.delete()
+        return redirect('articles:detail', article_pk)
+    return HttpResponse('You are Unauthorized', status=401)
