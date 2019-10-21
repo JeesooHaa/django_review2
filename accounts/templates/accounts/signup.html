@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Accounts::Signup{% endblock title %}
+
+{% block container %}
+<h2>회원가입</h2>
+{% comment %} 여기에 GET 으로 와서 POST 로 다시 간다 - action 생략 {% endcomment %}
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">회원가입</button>
+  {% comment %} <input type="submit" value="회원가입"> {% endcomment %}
+  {% comment %} 위와 동일 {% endcomment %}
+</form>
+{% endblock container %}

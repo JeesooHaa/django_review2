@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     # Local apps 
     'articles',
+    'accounts',
 
     # Third Party apps
     # '-' 이걸로 하면 오류남 

@@ -47,3 +47,15 @@ python manage.py dumpdata --format=yaml articles.article > articles.yaml
 fixtures 안에 있어야만 data seeding 이 됩니다.
 
 python manage.py loaddata articles.json
+
+
+
+### 19.10.21.
+
+cookies, session, cache
+
+로그인 : 세션 
+
+쿠키에 로그인 세션 저장 : 로그인 상태 
+
+로그아웃 : 세션에 대한 정보 삭제 
