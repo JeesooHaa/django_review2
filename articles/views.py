@@ -122,3 +122,14 @@ def comment_delete(request, comment_pk):
         return redirect('articles:detail', article_pk)
     # 쿠키를 지우고 접근할때 
     return HttpResponse('You are Unauthorized', status=401)
+
+
+def like(request, article_pk):
+    user = request.user
+    article = get_object_or_404(Article, pk=article_pk)
+    # exists 한개의 데이터라도 존재하면 true
+    if article.liked_users.filter(pk=user.pk).exists():
+        user.liked_articles.remove(article)
+    else:
+        user.liked_articles.add(article)
+    return redirect('articles:detail', article_pk)

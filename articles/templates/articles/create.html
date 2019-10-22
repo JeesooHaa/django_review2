@@ -9,6 +9,6 @@
   {% comment %} Cross-site request forgery {% endcomment %}
   {% csrf_token %}
   {{form.as_p}}
-  <button type="submit">Create</button>
+  <button class="btn-warning" type="submit">Create</button>
 </form>
 {% endblock container %}

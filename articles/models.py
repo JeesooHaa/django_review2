@@ -3,6 +3,8 @@ from django.core.validators import EmailValidator, MinValueValidator
 from django.conf import settings
 
 
+# article.liked_users.all()
+# user.liked_articles.all()
 class Article(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
@@ -12,6 +14,8 @@ class Article(models.Model):
     # article.user
     # user.article_set.all()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # related_name 역참조 
+    liked_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_articles')
 
     # 역순 정렬 / migrate 안해도됨 
     class Meta:

@@ -66,3 +66,14 @@ dir()
 
 ### 19.10.22.
 
+doctor1.patients.add(patient1)
+
+patient1.doctors.remove(doctor1)
+
+
+
+orm...
+
+
+
+ERDcloud 
