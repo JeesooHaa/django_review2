@@ -20,11 +20,13 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         # Article 을 생성해달라고 하는 요청
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST) # title, content
         # embed()
-        if form.is_valid():
-            form.save()
-            return redirect('articles:index')
+        if form.is_valid(): # 필드에 적힌 내용만 확인, form 에 없는 NOT NULL 값들은 확인 못함 
+            article = form.save(commit=False)
+            article.user = request.user
+            article.save()
+            return redirect('articles:detail', article.pk)
         # 잘못 입력 되었을 경우 알려줌 
         # else:
         #     context = {'form': form}
@@ -55,14 +57,18 @@ def detail(request, article_pk):
 @login_required
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
-    if request.method == 'POST':
-        form = ArticleForm(request.POST, instance=article)
-        if form.is_valid():
-            form.save()
-            return redirect('articles:detail', article_pk)
-    else:
-        # 우와
-        form = ArticleForm(instance=article)
+    if article.user == request.user:
+        # if request.method == 'POST' and article.user == request.user:
+        if request.method == 'POST':
+            form = ArticleForm(request.POST, instance=article)
+            if form.is_valid():
+                form.save()
+                return redirect('articles:detail', article_pk)
+        else:
+            # 우와
+            form = ArticleForm(instance=article)
+    else: 
+        return redirect('articles:detail', article_pk)
     context = {'form':form}
     return render(request, 'articles/update.html', context)
 
@@ -77,7 +83,10 @@ def delete(request, article_pk):
     if request.user.is_authenticated:
         article = get_object_or_404(Article, pk=article_pk)
         # if request.method == 'POST':
-        article.delete()
+        if article.user == request.user:
+            article.delete()
+        else:
+            return redirect('articles:detail', article_pk)
         # 보여줄만한 페이지가 따로 없다...
     return redirect('articles:index')
 
@@ -92,6 +101,7 @@ def comment_create(request, article_pk):
             # 임시저장 
             comment = form.save(commit=False)
             comment.article_id = article_pk
+            comment.user = request.user
             comment.save()
             return redirect('articles:detail', article_pk)
 
@@ -106,6 +116,9 @@ def comment_delete(request, comment_pk):
     if request.user.is_authenticated:
         comment = get_object_or_404(Comment, pk=comment_pk)
         article_pk = comment.article_id
-        comment.delete()
+        article = get_object_or_404(Article, pk=article_pk)
+        if comment.user == request.user or article.user == request.user:   
+            comment.delete()
         return redirect('articles:detail', article_pk)
+    # 쿠키를 지우고 접근할때 
     return HttpResponse('You are Unauthorized', status=401)

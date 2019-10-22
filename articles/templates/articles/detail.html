@@ -6,11 +6,13 @@
 
 <h2>{{ article.title }}</h2>
 <p>{{ article.created_at }}</p>
+<p>작성자: {{ article.user }}</p>
 <hr>
 <p>{{ article.content }}</p>
 <hr>
 
-{% if user.is_authenticated %}
+{% comment %} {% if user.is_authenticated %} {% endcomment %}
+{% if article.user == request.user %}
 <a href="{% url 'articles:update' article.pk %}">[Update]</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
   {% csrf_token %}
@@ -20,12 +22,13 @@
 {% endif %}
 
 {% for comment in comments %}
-<p>{{ comment.pk }}. {{ comment.content }}</p>
-{% if user.is_authenticated %}
+<span>{{ comment.pk }}. {{ comment.content }} by {{ comment.user }}</span>
+{% if comment.user == request.user or article.user == request.user %}
 <form action="{% url 'articles:comment_delete' comment.pk %}", method="POST">
   {% csrf_token %}
-  <button type="submit">Comment Delete</button>
+  <button class="btn btn-link" type="submit">Comment Delete</button>
 </form>
+<hr>
 {% endif %}
 {% endfor %}
 

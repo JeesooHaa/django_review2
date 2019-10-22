@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import EmailValidator, MinValueValidator
+from django.conf import settings
 
 
 class Article(models.Model):
@@ -7,16 +8,22 @@ class Article(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # models.py 에서만 이렇게 가져옴 
+    # article.user
+    # user.article_set.all()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # 역순 정렬 / migrate 안해도됨 
     class Meta:
         ordering = ('-pk', )
 
 
+# 1:N 관계가 두개다 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-pk', )

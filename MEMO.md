@@ -61,3 +61,8 @@ cookies, session, cache
 로그아웃 : 세션에 대한 정보 삭제 
 
 dir()
+
+
+
+### 19.10.22.
+

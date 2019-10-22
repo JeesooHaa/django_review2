@@ -18,9 +18,10 @@
     <p>
       <span>Hello, {{ user.username }}</span>
       <a href="{% url 'accounts:logout' %}">[Logout]</a>
+      <a href="{% url 'accounts:update' %}">[Update]</a>
       <form action="{% url 'accounts:delete' %}" method="POST">
         {% csrf_token %}
-        <button type="submit">Delete</button>
+        <button class="btn-warning" type="submit">Delete</button>
       </form>
     </p>
     {% else %}
