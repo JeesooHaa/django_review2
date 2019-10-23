@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
@@ -124,12 +125,28 @@ def comment_delete(request, comment_pk):
     return HttpResponse('You are Unauthorized', status=401)
 
 
+@login_required
 def like(request, article_pk):
     user = request.user
     article = get_object_or_404(Article, pk=article_pk)
     # exists 한개의 데이터라도 존재하면 true
     if article.liked_users.filter(pk=user.pk).exists():
+    # if user in article.liked_users.all():
         user.liked_articles.remove(article)
     else:
         user.liked_articles.add(article)
+    return redirect('articles:detail', article_pk)
+
+
+@login_required
+def follow(request, article_pk, user_pk):
+    # 로그인한 유저가 게시글 유저를 Follow or unfollow 한다. 
+    user = request.user
+    person = get_object_or_404(get_user_model(), pk=user_pk)
+
+    if user in person.followers.all(): # 이미 팔로워다
+        person.followers.remove(user) # 언팔 
+    else:
+        person.followers.add(user) # 팔로우함
+
     return redirect('articles:detail', article_pk)

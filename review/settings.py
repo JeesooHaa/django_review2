@@ -136,3 +136,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets')
 ]
+
+# AUTH_USER_MODEL = default user model
+# 상속 후 등록
+AUTH_USER_MODEL = 'accounts.User' # '앱이름.모델이름'

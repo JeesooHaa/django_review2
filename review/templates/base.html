@@ -12,7 +12,7 @@
   <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
-  <header>
+  <header class="container">
     <h1>저희 페이지 오신걸 환영합니다.</h1>
     {% comment %} user 는 template 이 기본적으로 가지고 있는 정보 {% endcomment %}
     {% if user.is_authenticated %}
@@ -34,7 +34,9 @@
     <a href="{% url 'articles:index' %}">[List]</a>
     <hr>
   </header>
+  <div class="container">
   {% block container %}{% endblock container %}
+  </div>
   <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
