@@ -7,14 +7,25 @@
 <h2>{{ article.title }}</h2>
 <p>{{ article.created_at }}</p>
 <p>작성자: {{ article.user }}</p>
-<a href="{% url 'articles:like' article.pk %}">
+{% comment %} <a href="{% url 'articles:like' article.pk %}">
   {% if user in article.liked_users.all %}
   <i class="fas fa-heart fa-lg" style="color: red"></i>
   {% else %}
   <i class="far fa-heart fa-lg" style="color: red"></i>
   {% endif %}
-</a>
-<span>{{ article.liked_users.all | length }}명이 이 글을 좋아합니다.</span>
+</a> {% endcomment %}
+
+<p>
+  <i 
+    class="{% if user in article.liked_users.all %}fas{% else %}far{% endif %} fa-heart fa-lg" 
+    id="like-btn" 
+    {% comment %} dataset.id 로 들어감 {% endcomment %}
+    data-id="{{ article.pk }}" 
+    style="color: red"
+  >
+  </i>
+  <span id="like-count">{{ article.liked_users.all | length }}</span>명이 이 글을 좋아합니다.
+</p>
 <hr>
 <p>{{ article.content }}</p>
 <hr>
@@ -52,4 +63,27 @@
 {% comment %} 컴포넌트 {% endcomment %}
 {% include 'articles/_follow.html' %}
 
+<script>
+  const likeBtn = document.querySelector('#like-btn')
+  likeBtn.addEventListener('click', function(event) {
+    // Button 의 data-id 속성을 아래 코드로 가지고 온다.
+    const articleId = event.target.dataset.id
+    axios.get(`/articles/${articleId}/like/`)
+      .then(function(response) {
+
+        // 사용자의 좋아요 상태에 따라 버튼 클래스 변경 
+        if(response.data.liked) {
+          likeBtn.classList.remove('far')
+          likeBtn.classList.add('fas')
+        } else {
+          likeBtn.classList.remove('fas')
+          likeBtn.classList.add('far')          
+        }
+
+        // 아티클을 좋아하는 사람들 수를 응답받아 적용 
+        const likeCount = document.querySelector('#like-count')
+        likeCount.innerText = response.data.count
+      })
+  })
+</script>
 {% endblock container %}
